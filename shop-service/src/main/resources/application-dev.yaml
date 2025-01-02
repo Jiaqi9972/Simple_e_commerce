@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/antra_e_commerce_db_shop
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+user-service:
+  base-url: http://localhost:8081

@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: user-service
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+server:
+  port: 8081
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{traceId}] %-5level %logger{36} - %msg%n"

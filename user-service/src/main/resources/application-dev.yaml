@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/antra_e_commerce_db_user
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+
+aws:
+  region: us-west-2
+  dynamodb:
+    table:
+      address: CustomerAddress
