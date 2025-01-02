@@ -88,6 +88,8 @@
 
 ### 11-12 are public
 
+### 13 is internal
+
 1. POST `/create`
    
    create inventory record 
@@ -135,3 +137,35 @@
 12. GET `/product/search`
     
     **public** search product
+
+13. GET `/internal/checking-stock`
+    
+    **internal** check product inventory
+
+## Order Service `/api/v1/order`
+
+### all need auth
+
+1. POST `/create`
+   
+   create new order
+
+2. PATCH `/cancel/{orderId}`
+   
+   cancel an order
+
+3. PATCH `/ship/{orderId}`
+   
+   ship an order
+
+4. PATCH `/complete/{orderId}`
+   
+   complete an order
+
+5. GET `/search`
+   
+   search order
+
+6. GET `/{orderId}`
+   
+   get order details
