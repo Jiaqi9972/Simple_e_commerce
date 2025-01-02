@@ -1,4 +1,4 @@
-package me.findthepeach.userservice.controller;
+package me.findthepeach.orderservice.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/order")
 @RequiredArgsConstructor
 public class HealthController {
 
@@ -23,7 +23,7 @@ public class HealthController {
             try (Statement statement = connection.createStatement()) {
                 statement.executeQuery("SELECT 1");
             }
-            return "User Service Healthy!";
+            return "Order Service Healthy!";
         }
     }
 }

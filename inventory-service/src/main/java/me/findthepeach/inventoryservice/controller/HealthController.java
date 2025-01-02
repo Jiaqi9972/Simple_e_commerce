@@ -23,7 +23,7 @@ public class HealthController {
             try (Statement statement = connection.createStatement()) {
                 statement.executeQuery("SELECT 1");
             }
-            return "InventoryService Healthy!";
+            return "Inventory Service Healthy!";
         }
     }
 }

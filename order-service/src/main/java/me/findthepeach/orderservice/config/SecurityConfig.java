@@ -1,4 +1,4 @@
-package me.findthepeach.userservice.config;
+package me.findthepeach.orderservice.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -36,9 +36,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> {
                     auth
-                            .requestMatchers(HttpMethod.GET,"/api/v1/user/health").permitAll()
-                            .requestMatchers(HttpMethod.POST,"/api/v1/user/register").permitAll()
-                            .requestMatchers("/api/v1/user/**").authenticated()
+                            .requestMatchers(HttpMethod.GET,"/api/v1/order/health").permitAll()
+                            .requestMatchers("/api/v1/order/**").authenticated()
                             .anyRequest().denyAll();
                 })
                 .oauth2ResourceServer(oauth2ResourceServer ->

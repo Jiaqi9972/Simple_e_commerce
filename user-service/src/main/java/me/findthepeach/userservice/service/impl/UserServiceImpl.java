@@ -77,6 +77,8 @@ public class UserServiceImpl implements UserService {
         if (user.getRole() != Role.USER) {
             throw new UserException(ReturnCode.INVALID_ROLE_TYPE);
         }
+
+        // TODO set cognito user group
         try {
             Role role = Role.valueOf(userDto.getRole().toUpperCase());
             user.setRole(role);

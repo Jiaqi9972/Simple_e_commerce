@@ -6,6 +6,7 @@ import me.findthepeach.common.enums.ProductStatus;
 import me.findthepeach.common.response.constant.ReturnCode;
 import me.findthepeach.common.response.exception.InventoryException;
 import me.findthepeach.common.response.exception.UserException;
+import me.findthepeach.inventoryservice.model.dto.CheckInventoryDto;
 import me.findthepeach.inventoryservice.model.dto.ProductDto;
 import me.findthepeach.inventoryservice.model.dto.ShopDto;
 import me.findthepeach.inventoryservice.model.entity.Inventory;
@@ -103,6 +104,31 @@ public class ProductQueryServiceImpl implements ProductQueryService {
         ShopDto shopInfo = getShopInfo(product.getShopId());
         Inventory inventory = inventoryRepository.findById(productId).orElse(null);
         return convertToDetailDto(product, shopInfo, inventory);
+    }
+
+    @Override
+    public CheckInventoryDto checkInventory(CheckInventoryDto checkInventoryDto) {
+
+        UUID productId = checkInventoryDto.getProductId();
+        int quantity = checkInventoryDto.getQuantity();
+
+        Inventory inventory = inventoryRepository.findById(productId).orElseThrow(
+                () -> new InventoryException(ReturnCode.PRODUCT_NOT_FOUND)
+        );
+
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new InventoryException(ReturnCode.PRODUCT_NOT_FOUND)
+        );
+
+        if(quantity > inventory.getQuantity()) {
+            checkInventoryDto.setHasStock(false);
+        }else{
+            checkInventoryDto.setHasStock(true);
+            checkInventoryDto.setShopId(product.getShopId());
+            checkInventoryDto.setMerchantId(product.getOwnerId());
+        }
+
+        return checkInventoryDto;
     }
 
     private ShopDto getShopInfo(UUID shopId) {

@@ -1,5 +1,6 @@
 package me.findthepeach.inventoryservice.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -21,6 +22,9 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+    @Value("${cognito.issuerUri}")
+    private String issuerUri;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -66,7 +70,6 @@ public class SecurityConfig {
     @Bean
     public JwtDecoder jwtDecoder() {
         // TODO add cognito uri here
-        String issuerUri = "https://cognito-idp.us-west-2.amazonaws.com/us-west-2_gx1ErGyAQ";
         return JwtDecoders.fromIssuerLocation(issuerUri);
     }
 

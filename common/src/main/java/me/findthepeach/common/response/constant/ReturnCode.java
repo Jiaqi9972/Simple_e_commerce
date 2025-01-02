@@ -20,6 +20,7 @@ public enum ReturnCode {
     ADDRESS_UPDATE_FAILED(2006, "Failed to update address", HttpStatus.INTERNAL_SERVER_ERROR),
     ADDRESS_DELETE_FAILED(2007, "Failed to delete address", HttpStatus.INTERNAL_SERVER_ERROR),
     ADDRESS_RETRIEVE_FAILED(2008, "Failed to retrieve address", HttpStatus.INTERNAL_SERVER_ERROR),
+    ILLGAL_ADDRESS(2009, "Illegal address", HttpStatus.BAD_REQUEST),
 
     // Shop Domain (2500-2999)
     SHOP_NOT_FOUND(2501, "Shop not found", HttpStatus.NOT_FOUND),
@@ -29,9 +30,11 @@ public enum ReturnCode {
     // Inventory Domain (3000-3499)
     PRODUCT_NOT_FOUND(3000, "Product not found", HttpStatus.NOT_FOUND),
     INVENTORY_NOT_FOUND(3001, "Inventory not found", HttpStatus.NOT_FOUND),
+    STOCK_NOT_ENOUGH(3002, "Stock not enough", HttpStatus.BAD_REQUEST),
 
     // Order Domain (4000-4499)
     ORDER_NOT_FOUND(4000, "Order not found", HttpStatus.NOT_FOUND),
+    INVALID_ORDER_STATUS(4001, "Invalid order status", HttpStatus.BAD_REQUEST),
 
     // System Errors (5000-5499)
     INTERNAL_ERROR(5000, "Internal server error", HttpStatus.INTERNAL_SERVER_ERROR),

@@ -1,4 +1,4 @@
-package me.findthepeach.inventoryservice.config;
+package me.findthepeach.orderservice.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

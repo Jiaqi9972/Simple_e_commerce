@@ -1,6 +1,7 @@
 package me.findthepeach.shopservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import me.findthepeach.common.dto.ShopOwnerResponseDto;
 import me.findthepeach.common.enums.ShopStatus;
 import me.findthepeach.shopservice.model.dto.ShopDto;
 import me.findthepeach.shopservice.service.ShopQueryService;
@@ -41,8 +42,8 @@ public class ShopQueryController {
     }
 
     @GetMapping("/owner/{shopId}")
-    public void checkOwner(@PathVariable UUID shopId, @AuthenticationPrincipal Jwt jwt) {
+    public ShopOwnerResponseDto checkOwner(@PathVariable UUID shopId, @AuthenticationPrincipal Jwt jwt) {
         UUID ownerId = UUID.fromString(jwt.getClaimAsString("sub"));
-        shopQueryService.checkOwner(shopId, ownerId);
+        return shopQueryService.checkOwner(shopId, ownerId);
     }
 }

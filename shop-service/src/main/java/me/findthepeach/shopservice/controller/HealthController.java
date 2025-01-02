@@ -23,7 +23,7 @@ public class HealthController {
             try (Statement statement = connection.createStatement()) {
                 statement.executeQuery("SELECT 1");
             }
-            return "ShopService Healthy!";
+            return "Shop Service Healthy!";
         }
     }
 }

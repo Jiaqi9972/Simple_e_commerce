@@ -1,6 +1,7 @@
 package me.findthepeach.inventoryservice.service;
 
 import me.findthepeach.common.enums.ProductStatus;
+import me.findthepeach.inventoryservice.model.dto.CheckInventoryDto;
 import me.findthepeach.inventoryservice.model.dto.ProductDto;
 import org.springframework.data.domain.Page;
 
@@ -21,4 +22,6 @@ public interface ProductQueryService {
     // need auth
     ProductDto ownerGetProductById(UUID ownerId, UUID productId);
 
+    // internal
+    CheckInventoryDto checkInventory(CheckInventoryDto checkInventoryDto);
 }
