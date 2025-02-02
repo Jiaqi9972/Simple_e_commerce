@@ -1,16 +1,23 @@
 package me.findthepeach.userservice.service.impl;
 
+
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.findthepeach.common.enums.Role;
 import me.findthepeach.common.response.constant.ReturnCode;
 import me.findthepeach.common.response.exception.UserException;
+import me.findthepeach.userservice.config.CognitoProperties;
 import me.findthepeach.userservice.model.dto.*;
 import me.findthepeach.userservice.model.entity.User;
 import me.findthepeach.userservice.repository.UserRepository;
 import me.findthepeach.userservice.service.UserService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminAddUserToGroupRequest;
+import software.amazon.awssdk.services.cognitoidentityprovider.model.CognitoIdentityProviderException;
 
 import java.util.UUID;
 
@@ -20,12 +27,21 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CognitoProperties cognitoProperties;
+    private final CognitoIdentityProviderClient cognitoClient;
+
+    @PostConstruct
+    public void init() {
+        log.info("Cognito configuration: userPoolId={}, region={}",
+                cognitoProperties.getUserPoolId(),
+                cognitoProperties.getRegion());
+    }
 
     @Override
     @Transactional
     public void registerUser(UserRegistrationDto registrationDto) {
         // TODO
-        // add cognito IAM auth
+        // add api key
         log.info("Registering new user with sub: {}", registrationDto.getUserSub());
         if (registrationDto.getUserSub() == null || registrationDto.getUsername() == null || registrationDto.getEmail() == null) {
             throw new UserException(ReturnCode.INVALID_PARAMETER);
@@ -67,10 +83,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+    @PreAuthorize("hasAuthority('USER')")
     public void setRole(UUID userSub, UserRoleUpdateDto roleUpdateDto) {
-        log.info("Set Role for user: {}", roleUpdateDto.getUserSub());
+        log.info("Set Role for user: {}", userSub);
+
         User user = userRepository.findById(userSub)
                 .orElseThrow(() -> new UserException(ReturnCode.USER_NOT_FOUND));
+
         if (roleUpdateDto.getRole() == null || roleUpdateDto.getRole().equals(Role.ADMIN.name())) {
             throw new UserException(ReturnCode.INVALID_ROLE_TYPE);
         }
@@ -78,12 +97,28 @@ public class UserServiceImpl implements UserService {
             throw new UserException(ReturnCode.INVALID_ROLE_TYPE);
         }
 
-        // TODO set cognito user group
         try {
-            Role role = Role.valueOf(roleUpdateDto.getRole().toUpperCase());
-            user.setRole(role);
-            userRepository.save(user);
-            log.debug("Role set successfully: {}", roleUpdateDto.getRole());
+            Role newRole = Role.valueOf(roleUpdateDto.getRole().toUpperCase());
+
+            AdminAddUserToGroupRequest addUserRequest = AdminAddUserToGroupRequest.builder()
+                    .userPoolId(cognitoProperties.getUserPoolId())
+                    .username(user.getUserSub().toString())
+                    .groupName(newRole.name())
+                    .build();
+
+            try {
+                // add user to cognito group
+                cognitoClient.adminAddUserToGroup(addUserRequest);
+
+                // update db role
+                user.setRole(newRole);
+                userRepository.save(user);
+
+                log.info("Role set successfully for user: {}. Role: {}", userSub, newRole);
+            } catch (CognitoIdentityProviderException e) {
+                log.error("Failed to add user to Cognito group. User: {}, Error: {}", userSub, e.getMessage());
+                throw new UserException(ReturnCode.COGNITO_GROUP_ERROR);
+            }
         } catch (IllegalArgumentException e) {
             throw new UserException(ReturnCode.INVALID_ROLE_TYPE);
         }

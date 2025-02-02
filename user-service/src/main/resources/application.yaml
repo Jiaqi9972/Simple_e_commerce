@@ -14,12 +14,18 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{traceId}] %-5level %logger{36} - %msg%n"
 
-cognito:
-  issuerUri: ${COGNITO_ISSUERURI}
-
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true
     path: /swagger-ui.html
   api-docs:
     enabled: true
+
+aws:
+  profile: ${AWS_PROFILE}
+  cognito:
+    user-pool-id: ${COGNITO_USER_POOL_ID}
+    client-id: ${COGNITO_CLIENT_ID}
+    region: ${AWS_REGION}
+cognito:
+  issuerUri: ${COGNITO_ISSUERURI}

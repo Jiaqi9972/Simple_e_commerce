@@ -20,7 +20,8 @@ public enum ReturnCode {
     ADDRESS_UPDATE_FAILED(2006, "Failed to update address", HttpStatus.INTERNAL_SERVER_ERROR),
     ADDRESS_DELETE_FAILED(2007, "Failed to delete address", HttpStatus.INTERNAL_SERVER_ERROR),
     ADDRESS_RETRIEVE_FAILED(2008, "Failed to retrieve address", HttpStatus.INTERNAL_SERVER_ERROR),
-    ILLGAL_ADDRESS(2009, "Illegal address", HttpStatus.BAD_REQUEST),
+    ILLEGAL_ADDRESS(2009, "Illegal address", HttpStatus.BAD_REQUEST),
+    COGNITO_GROUP_ERROR(2010, "Cognito group error", HttpStatus.INTERNAL_SERVER_ERROR),
 
     // Shop Domain (2500-2999)
     SHOP_NOT_FOUND(2501, "Shop not found", HttpStatus.NOT_FOUND),

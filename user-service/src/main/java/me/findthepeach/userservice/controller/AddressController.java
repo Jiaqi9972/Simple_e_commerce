@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import me.findthepeach.common.dto.AddressDto;
 import me.findthepeach.userservice.service.AddressService;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('CUSTOMER')")
 @Tag(name = "Address Management", description = "APIs for managing user addresses")
 public class AddressController {
     private final AddressService addressService;

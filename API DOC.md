@@ -4,7 +4,7 @@
 
 ### all need auth
 
-1. POST `/register`
+1. POST `/account`
    
    receive data from cognito and synchronize the db with user group
 
@@ -12,15 +12,15 @@
    
    get personal info
 
-3. PATCH `/set-role`
+3. PATCH `/role`
    
    set role (MERCHANT or CUSTOMER)
 
-4. PATCH `/update-user-info`
+4. PATCH `/user-info`
    
    update personal info
 
-5. POST `/address/add`
+5. POST `/address`
    
    add address
 

@@ -6,7 +6,7 @@ spring:
     password: ${POSTGRES_PASSWORD}
 
 aws:
-  region: us-west-2
+  region: ${AWS_REGION}
   dynamodb:
     table:
-      address: CustomerAddress
+      address: ${DYNAMODB_ADDRESS_TABLE}

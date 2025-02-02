@@ -31,14 +31,14 @@ public class AddressServiceImpl implements AddressService {
 
     public AddressServiceImpl(
             @Value("${aws.dynamodb.table.address}") String tableName,
-            @Value("${aws.region}") String awsRegion) {
+            @Value("${aws.region}") String awsRegion,
+            @Value("${aws.profile}") String awsProfile) {
         this.tableName = tableName;
         this.dynamoDBClient = DynamoDbClient.builder()
                 .region(Region.of(awsRegion))
-                .credentialsProvider(ProfileCredentialsProvider.create("qu9972.2025"))
+                .credentialsProvider(ProfileCredentialsProvider.create(awsProfile))
                 .build();
     }
-
 
     @Override
     public void addAddress(AddressDto addressDto, UUID userId) {

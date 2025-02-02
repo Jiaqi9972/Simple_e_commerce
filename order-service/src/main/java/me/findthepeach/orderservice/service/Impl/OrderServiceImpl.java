@@ -168,38 +168,38 @@ public class OrderServiceImpl implements OrderService {
 
     private void validateAddress(AddressDto address) {
         if (address == null) {
-            throw new UserException(ReturnCode.ILLGAL_ADDRESS);
+            throw new UserException(ReturnCode.ILLEGAL_ADDRESS);
         }
 
         // Check if address ID is null (assuming it should be present)
         if (address.getAddressId() == null) {
-            throw new UserException(ReturnCode.ILLGAL_ADDRESS);
+            throw new UserException(ReturnCode.ILLEGAL_ADDRESS);
         }
 
         // Check if required fields are not empty
         if (address.getStreet() == null || address.getStreet().trim().isEmpty()) {
-            throw new UserException(ReturnCode.ILLGAL_ADDRESS);
+            throw new UserException(ReturnCode.ILLEGAL_ADDRESS);
         }
 
         if (address.getCity() == null || address.getCity().trim().isEmpty()) {
-            throw new UserException(ReturnCode.ILLGAL_ADDRESS);
+            throw new UserException(ReturnCode.ILLEGAL_ADDRESS);
         }
 
         if (address.getState() == null || address.getState().trim().isEmpty()) {
-            throw new UserException(ReturnCode.ILLGAL_ADDRESS);
+            throw new UserException(ReturnCode.ILLEGAL_ADDRESS);
         }
 
         if (address.getZipCode() == null || address.getZipCode().trim().isEmpty()) {
-            throw new UserException(ReturnCode.ILLGAL_ADDRESS);
+            throw new UserException(ReturnCode.ILLEGAL_ADDRESS);
         }
 
         if (address.getCountry() == null || address.getCountry().trim().isEmpty()) {
-            throw new UserException(ReturnCode.ILLGAL_ADDRESS);
+            throw new UserException(ReturnCode.ILLEGAL_ADDRESS);
         }
 
         // Check if receiver name is provided
         if (address.getReceiver() == null || address.getReceiver().trim().isEmpty()) {
-            throw new UserException(ReturnCode.ILLGAL_ADDRESS);
+            throw new UserException(ReturnCode.ILLEGAL_ADDRESS);
         }
     }
 }
