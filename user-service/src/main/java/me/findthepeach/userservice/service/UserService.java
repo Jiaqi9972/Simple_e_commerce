@@ -1,16 +1,16 @@
 package me.findthepeach.userservice.service;
 
-import me.findthepeach.userservice.model.dto.UserDto;
+import me.findthepeach.userservice.model.dto.*;
 
 import java.util.UUID;
 
 public interface UserService {
-    void registerUser(UserDto userDto);
+    void registerUser(UserRegistrationDto registrationDto);
 
-    UserDto getUserInfo(UUID userSub);
+    UserProfileDto getUserInfo(UUID userSub);
 
-    void setRole(UUID userSub, UserDto userDto);
+    void setRole(UUID userSub, UserRoleUpdateDto roleUpdateDto);
 
-    void updateUserInfo(UUID userSub, UserDto userDto);
+    void updateUserInfo(UUID userSub, UserUpdateDto updateDto);
 
 }

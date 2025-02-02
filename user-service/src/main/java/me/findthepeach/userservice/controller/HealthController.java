@@ -1,5 +1,7 @@
 package me.findthepeach.userservice.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +15,11 @@ import java.sql.Statement;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@Tag(name = "Health Check", description = "Service health monitoring endpoints")
 public class HealthController {
-
     private final DataSource dataSource;
 
+    @Operation(summary = "Check database connection health")
     @GetMapping("/health")
     public String healthCheckConnection() throws SQLException {
         try (Connection connection = dataSource.getConnection()) {

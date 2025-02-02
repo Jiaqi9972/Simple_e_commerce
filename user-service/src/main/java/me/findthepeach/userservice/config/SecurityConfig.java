@@ -36,8 +36,11 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> {
                     auth
+                            // Swagger UI endpoints
+                            .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                            // Service endpoints
                             .requestMatchers(HttpMethod.GET,"/api/v1/user/health").permitAll()
-                            .requestMatchers(HttpMethod.POST,"/api/v1/user/register").permitAll()
+                            .requestMatchers(HttpMethod.POST,"/api/v1/user/account").permitAll()
                             .requestMatchers("/api/v1/user/**").authenticated()
                             .anyRequest().denyAll();
                 })

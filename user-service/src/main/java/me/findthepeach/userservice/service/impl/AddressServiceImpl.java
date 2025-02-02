@@ -10,8 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
+import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.*;
@@ -35,7 +35,7 @@ public class AddressServiceImpl implements AddressService {
         this.tableName = tableName;
         this.dynamoDBClient = DynamoDbClient.builder()
                 .region(Region.of(awsRegion))
-                .credentialsProvider(DefaultCredentialsProvider.create())
+                .credentialsProvider(ProfileCredentialsProvider.create("qu9972.2025"))
                 .build();
     }
 
@@ -53,9 +53,13 @@ public class AddressServiceImpl implements AddressService {
         item.put("state", AttributeValue.builder().s(addressDto.getState()).build());
         item.put("zipCode", AttributeValue.builder().s(addressDto.getZipCode()).build());
         item.put("isDefault", AttributeValue.builder().bool(addressDto.isDefault()).build());
+        item.put("country", AttributeValue.builder().s(addressDto.getCountry()).build());
         item.put("receiver", AttributeValue.builder().s(addressDto.getReceiver()).build());
 
+        System.out.println(item);
+
         try {
+
             PutItemRequest putItemRequest = PutItemRequest.builder()
                     .tableName(tableName)
                     .item(item)
@@ -87,6 +91,9 @@ public class AddressServiceImpl implements AddressService {
                 .action(AttributeAction.PUT).build());
         updates.put("state", AttributeValueUpdate.builder()
                 .value(AttributeValue.builder().s(addressDto.getState()).build())
+                .action(AttributeAction.PUT).build());
+        updates.put("country", AttributeValueUpdate.builder()
+                .value(AttributeValue.builder().s(addressDto.getCountry()).build())
                 .action(AttributeAction.PUT).build());
         updates.put("zipCode", AttributeValueUpdate.builder()
                 .value(AttributeValue.builder().s(addressDto.getZipCode()).build())

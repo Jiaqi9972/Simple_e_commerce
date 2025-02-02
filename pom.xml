@@ -27,6 +27,7 @@
         <dynamo.version>2.29.6</dynamo.version>
         <hypersistence-utils-hibernate-63.version>3.8.3</hypersistence-utils-hibernate-63.version>
         <spring-webflux.version>6.2.1</spring-webflux.version>
+        <springdoc-openapi-starter-webmvc-ui.version>2.8.4</springdoc-openapi-starter-webmvc-ui.version>
     </properties>
 
     <modules>
@@ -88,6 +89,14 @@
                 <artifactId>dynamodb</artifactId>
                 <version>${dynamo.version}</version>
             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc-openapi-starter-webmvc-ui.version}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.springframework.boot</groupId>

@@ -23,13 +23,39 @@ public class ResponseResultHandler implements ResponseBodyAdvice<Object> {
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
         // handle return type which is not equals to ApiResponse
-        return !returnType.getParameterType().equals(ApiResponse.class);
+        if (returnType.getParameterType().equals(ApiResponse.class)) {
+            return false;
+        }
+
+        if (returnType.getContainingClass().isAnnotationPresent(RestControllerAdvice.class)) {
+            return false;
+        }
+
+        // swagger
+        String packageName = returnType.getDeclaringClass().getPackage().getName();
+        return !packageName.contains("springdoc") &&
+                !packageName.contains("swagger") &&
+                !packageName.contains("openapi");
     }
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
                                   Class<? extends HttpMessageConverter<?>> selectedConverterType,
                                   ServerHttpRequest request, ServerHttpResponse response) {
+
+        // swagger
+        String path = request.getURI().getPath();
+        if (path.contains("/v3/api-docs") ||
+                path.contains("/swagger-ui/") ||
+                path.contains("/swagger-resources")) {
+            return body;
+        }
+
+        // handle ApiResponse
+        if (body instanceof ApiResponse) {
+            return body;
+        }
+
         // handle null
         if (body == null) {
             return ApiResponse.success(null);

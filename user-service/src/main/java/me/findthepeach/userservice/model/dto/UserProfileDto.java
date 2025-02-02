@@ -7,10 +7,11 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
+@Schema(description = "User Profile Response")
 @Builder
-@Schema(description = "User Data Transfer Object")
-public class UserDto {
-    @Schema(description = "User ID", example = "123e4567-e89b-12d3-a456-426614174000")
+public class UserProfileDto {
+
+    @Schema(description = "User sub", example = "123e4567-e89b-12d3-a456-426614174000")
     private UUID userSub;
 
     @Schema(description = "Username", example = "john_doe")

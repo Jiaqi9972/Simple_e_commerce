@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import me.findthepeach.common.enums.Role;
 import me.findthepeach.common.response.constant.ReturnCode;
 import me.findthepeach.common.response.exception.UserException;
-import me.findthepeach.userservice.model.dto.UserDto;
+import me.findthepeach.userservice.model.dto.*;
 import me.findthepeach.userservice.model.entity.User;
 import me.findthepeach.userservice.repository.UserRepository;
 import me.findthepeach.userservice.service.UserService;
@@ -23,40 +23,40 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void registerUser(UserDto userDto) {
+    public void registerUser(UserRegistrationDto registrationDto) {
         // TODO
         // add cognito IAM auth
-        log.info("Registering new user with sub: {}", userDto.getUserSub());
-        if (userDto.getUserSub() == null || userDto.getUsername() == null || userDto.getEmail() == null) {
+        log.info("Registering new user with sub: {}", registrationDto.getUserSub());
+        if (registrationDto.getUserSub() == null || registrationDto.getUsername() == null || registrationDto.getEmail() == null) {
             throw new UserException(ReturnCode.INVALID_PARAMETER);
         }
 
-        boolean existsBySub = userRepository.existsById(userDto.getUserSub());
+        boolean existsBySub = userRepository.existsById(registrationDto.getUserSub());
         if (existsBySub) {
             throw new UserException(ReturnCode.USER_SUB_ALREADY_EXISTS);
         }
 
-        boolean existsByEmail = userRepository.existsByEmail(userDto.getEmail());
+        boolean existsByEmail = userRepository.existsByEmail(registrationDto.getEmail());
         if (existsByEmail) {
             throw new UserException(ReturnCode.EMAIL_ALREADY_EXISTS);
         }
 
         User user = User.builder()
-                .userSub(userDto.getUserSub())
-                .username(userDto.getUsername())
-                .email(userDto.getEmail())
+                .userSub(registrationDto.getUserSub())
+                .username(registrationDto.getUsername())
+                .email(registrationDto.getEmail())
                 .role(Role.USER)
                 .build();
         userRepository.save(user);
-        log.debug("User registered successfully: {}", userDto.getUserSub());
+        log.debug("User registered successfully: {}", registrationDto.getUserSub());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public UserDto getUserInfo(UUID userSub) {
+    public UserProfileDto getUserInfo(UUID userSub) {
         User user = userRepository.findById(userSub)
                 .orElseThrow(() -> new UserException(ReturnCode.USER_NOT_FOUND));
-        return UserDto.builder()
+        return UserProfileDto.builder()
                 .userSub(user.getUserSub())
                 .username(user.getUsername())
                 .email(user.getEmail())
@@ -67,11 +67,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void setRole(UUID userSub, UserDto userDto) {
-        log.info("Set Role for user: {}", userDto.getUserSub());
+    public void setRole(UUID userSub, UserRoleUpdateDto roleUpdateDto) {
+        log.info("Set Role for user: {}", roleUpdateDto.getUserSub());
         User user = userRepository.findById(userSub)
                 .orElseThrow(() -> new UserException(ReturnCode.USER_NOT_FOUND));
-        if (userDto.getRole() == null || userDto.getRole().equals(Role.ADMIN.name())) {
+        if (roleUpdateDto.getRole() == null || roleUpdateDto.getRole().equals(Role.ADMIN.name())) {
             throw new UserException(ReturnCode.INVALID_ROLE_TYPE);
         }
         if (user.getRole() != Role.USER) {
@@ -80,10 +80,10 @@ public class UserServiceImpl implements UserService {
 
         // TODO set cognito user group
         try {
-            Role role = Role.valueOf(userDto.getRole().toUpperCase());
+            Role role = Role.valueOf(roleUpdateDto.getRole().toUpperCase());
             user.setRole(role);
             userRepository.save(user);
-            log.debug("Role set successfully: {}", userDto.getRole());
+            log.debug("Role set successfully: {}", roleUpdateDto.getRole());
         } catch (IllegalArgumentException e) {
             throw new UserException(ReturnCode.INVALID_ROLE_TYPE);
         }
@@ -91,21 +91,21 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void updateUserInfo(UUID userSub, UserDto userDto) {
-        log.info("Update User Info: {}", userDto.getUserSub());
+    public void updateUserInfo(UUID userSub, UserUpdateDto updateDto) {
+        log.info("Update User Info: {}", updateDto.getUserSub());
         User user = userRepository.findById(userSub)
                 .orElseThrow(() -> new UserException(ReturnCode.USER_NOT_FOUND));
-        if (userDto.getUsername() == null && userDto.getAvatarUrl() == null) {
+        if (updateDto.getUsername() == null && updateDto.getAvatarUrl() == null) {
             throw new UserException(ReturnCode.INVALID_PARAMETER);
         }
-        if (userDto.getUsername() != null) {
-            user.setUsername(userDto.getUsername());
+        if (updateDto.getUsername() != null) {
+            user.setUsername(updateDto.getUsername());
         }
-        if (userDto.getAvatarUrl() != null) {
-            user.setAvatarUrl(userDto.getAvatarUrl());
+        if (updateDto.getAvatarUrl() != null) {
+            user.setAvatarUrl(updateDto.getAvatarUrl());
         }
         userRepository.save(user);
-        log.debug("User updated successfully: {}", userDto.getUserSub());
+        log.debug("User updated successfully: {}", updateDto.getUserSub());
     }
 
 }
